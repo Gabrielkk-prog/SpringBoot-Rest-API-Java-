@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compartilhar Dados - API REST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Documentação da API REST</h1>
+        
+        <div class="info-box">
+            <h2>🎯 Sobre o Projeto</h2>
+            <p>Esta é uma API REST desenvolvida com Spring Boot que se integra com o Supabase para recuperar dados.</p>
+        </div>
+
+        <div class="info-box">
+            <h2>🔗 Endpoints Disponíveis</h2>
+            <p><strong>GET /api/health</strong> - Verifica se o servidor está rodando</p>
+            <p><strong>GET /api/dados?tabela=nome_tabela</strong> - Recupera dados de uma tabela do Supabase</p>
+        </div>
+
+        <div class="info-box">
+            <h2>🚀 Como Usar</h2>
+            <ol>
+                <li>Abra o arquivo <code>client.html</code> no navegador</li>
+                <li>Digite o nome da tabela do Supabase (ex: users, produtos)</li>
+                <li>Clique em "Buscar Dados"</li>
+            </ol>
+        </div>
+
+        <div class="info-box">
+            <h2>⚙️ Configuração</h2>
+            <p>Edite o arquivo <code>application.properties</code> e configure:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><code>supabase.url</code> - URL do seu projeto Supabase</li>
+                <li><code>supabase.anon-key</code> - Chave anônima do Supabase</li>
+            </ul>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px; color: #999;">
+            <a href="client.html">← Voltar ao Cliente</a>
+        </p>
+    </div>
+</body>
+</html>
+

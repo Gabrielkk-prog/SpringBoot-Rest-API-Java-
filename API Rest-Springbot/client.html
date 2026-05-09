@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API REST Supabase - Cliente</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .loading {
+            text-align: center;
+            color: #667eea;
+        }
+        .error {
+            color: #d32f2f;
+        }
+        .success {
+            color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 API REST Supabase</h1>
+        <p class="subtitle">Cliente para buscar dados do Supabase</p>
+        
+        <div class="form-group">
+            <label for="tabela">Nome da Tabela:</label>
+            <input type="text" id="tabela" placeholder="ex: users, produtos, clientes" value="users">
+        </div>
+
+        <button id="loadData">Buscar Dados</button>
+
+        <div id="output"></div>
+    </div>
+
+    <script>
+        const outputDiv = document.getElementById('output');
+        const tabelaInput = document.getElementById('tabela');
+        const button = document.getElementById('loadData');
+
+        button.addEventListener('click', async () => {
+            const tabela = tabelaInput.value.trim();
+            
+            if (!tabela) {
+                outputDiv.textContent = '❌ Erro: Nome da tabela não pode estar vazio!';
+                outputDiv.className = 'error';
+                return;
+            }
+
+            outputDiv.textContent = '⏳ Carregando...';
+            outputDiv.className = 'loading';
+            button.disabled = true;
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/dados?tabela=${encodeURIComponent(tabela)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro ${response.status} - ${response.statusText}`);
+                }
+
+                const data = await response.text();
+                outputDiv.textContent = data;
+                outputDiv.className = 'success';
+            } catch (error) {
+                outputDiv.textContent = `❌ Erro: ${error.message}\n\nVerifique:\n- Se o servidor está rodando em http://localhost:8080\n- Se o nome da tabela está correto\n- As configurações do Supabase no application.properties`;
+                outputDiv.className = 'error';
+            } finally {
+                button.disabled = false;
+            }
+        });
+
+        // Permitir buscar ao pressionar Enter
+        tabelaInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                button.click();
+            }
+        });
+    </script>
+</body>
+</html>
+
