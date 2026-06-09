@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<!--
+    client.html
+
+    Small frontend to query the local API proxy and display the JSON
+    response from Supabase. Open this file in the browser and provide the
+    name of a Supabase table (e.g. "users"). The page will call the API at
+    http://localhost:8080/api/dados?tabela=TABLENAME by default.
+-->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -113,6 +121,12 @@
     </div>
 
     <script>
+        /*
+         * Script responsibilities:
+         * - read the table name from the input
+         * - call the backend API at /api/dados?tabela={name}
+         * - display the returned JSON or an error message
+         */
         const outputDiv = document.getElementById('output');
         const tabelaInput = document.getElementById('tabela');
         const button = document.getElementById('loadData');

@@ -1,198 +1,72 @@
-# 📚 API REST Springbot - Documentação Completa
+# API REST Springbot
 
-## 🎯 O que esse projeto faz?
+Projeto pequeno que serve como um proxy entre um frontend estático e o
+Supabase (banco de dados). A ideia é manter a lógica de chamada ao
+Supabase no backend Java (Spring Boot) e expor endpoints simples que o
+cliente pode consumir.
 
-Este projeto é uma **API REST** que actua como intermediária entre um frontend (navegador) e o **Supabase**. 
-
-**Fluxo:**
-```
-Frontend (client.html) → API Spring Boot (Backend) → Supabase (Banco de Dados)
-     |                          |                         |
-  Browser               Porta 8080                   Cloud Database
-```
-
-### Funcionalidades:
-- ✅ Servir uma página HTML com interface para buscar dados
-- ✅ Receber requisições do navegador para buscar dados
-- ✅ Conectar ao Supabase com autenticação segura
-- ✅ Retornar dados em formato JSON
-- ✅ Tratamento de erros e validações
+Principais recursos:
+- Endpoint de health-check: `GET /api/health`
+- Endpoint para buscar dados de uma tabela: `GET /api/dados?tabela={name}`
+- Frontend simples: `client.html` para testar a API no navegador
 
 ---
 
-## 🔴 Principais Erros na Estrutura Original
+Pré-requisitos
+- Java 17+
+- Maven 3.8+
 
-### Erro 1: **Código Java dentro de um arquivo HTML**
-```html
-<!-- ❌ ERRADO -->
-<script>
-  import org.springframework.stereotype.Service;  // Isso é Java, não JavaScript!
-  public class SupabaseService { ... }
-</script>
+Configuração
+1. Copie ou exporte as variáveis necessárias (recomendado via variáveis de ambiente):
+
 ```
-**Problema:** JavaScript do navegador não consegue executar código Java. Java é backend, JavaScript é frontend.
-
-
-
-## ✅ Como está organizado agora?
-
-### Estrutura de Pastas:
-```
-API Rest-Springbot/
-├── pom.xml                                    # Configuração do Maven
-├── client.html                                # Frontend (interface do usuário)
-├── share.html                                 # Documentação
-├── src/
-│   ├── main/
-│   │   ├── java/com/example/
-│   │   │   ├── Application.java              # Classe principal
-│   │   │   ├── controller/
-│   │   │   │   └── SupabaseController.java   # Endpoints REST
-│   │   │   └── service/
-│   │   │       └── SupabaseService.java      # Lógica de negócio
-│   │   └── resources/
-│   │       └── application.properties        # Configurações
+SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_ANON_KEY=chave_anonima
+SUPABASE_SERVICE_ROLE_KEY=chave_service_role (opcional)
+SERVER_PORT=8080 (opcional)
 ```
 
----
+Ou defina diretamente em `src/main/resources/application.properties` usando as variáveis de ambiente.
 
-## 🏗️ O que cada arquivo faz?
-
-### `pom.xml`
-- Define dependências do projeto (Maven)
-- Configuração de versão do Java (17)
-- Spring Boot WebFlux para requisições assíncronas
-
-### `application.properties`
-- Configurações centralizadas
-- URL e chaves do Supabase
-- Porta do servidor (8080)
-
-### `Application.java`
-- Classe principal que inicia o Spring Boot
-- Registra o `WebClient` como Bean (componente reutilizável)
-
-### `SupabaseController.java`
-- Define os **endpoints REST** da API
-- `GET /api/dados?tabela=users` - busca dados
-- `GET /api/health` - verifica se servidor está online
-- Permite CORS (requisições do navegador)
-
-### `SupabaseService.java`
-- Implementa a lógica de conexão com Supabase
-- Usa `WebClient` do Spring WebFlux
-- Retorna dados de forma **reativa** (Mono)
-
-### `client.html`
-- Interface visual no navegador
-- Permite digitar o nome da tabela
-- Exibe os dados retornados
-
----
-
-## 🚀 Como executar?
-
-### 1. Configurar credenciais
-Edite `src/main/resources/application.properties`:
-```properties
-supabase.url=https://seu-projeto.supabase.co
-supabase.anon-key=sua-chave-publica
-```
-
-### 2. Compilar e rodar
+Como rodar
 ```bash
-mvn clean install
+mvn clean package
 mvn spring-boot:run
 ```
 
-### 3. Acessar no navegador
+Abra no navegador:
+
 ```
 http://localhost:8080/client.html
 ```
 
----
-
-## � Configuração para GitHub
-
-### ⚠️ Segurança - NÃO commitar credenciais
-
-Este projeto usa variáveis de ambiente para proteger chaves sensíveis.
-
-### Passo 1: Copiar arquivo de exemplo
+Uso (exemplo curl)
 ```bash
-cp .env.example .env
+curl "http://localhost:8080/api/dados?tabela=users"
 ```
 
-### Passo 2: Editar `.env` com suas credenciais
-```env
-SUPABASE_URL=https://seu-projeto.supabase.co
-SUPABASE_ANON_KEY=sua_chave_anonima
-SUPABASE_SERVICE_ROLE_KEY=sua_chave_service_role
-SERVER_PORT=8080
+Observações de segurança
+- Não comite as chaves do Supabase no repositório.
+- O endpoint atual expõe dados públicos usando a chave anônima.
+  Para operações administrativas use a `service-role` key com cautela.
+
+Estrutura do projeto
+```
+API Rest-Springbot/
+├── pom.xml
+├── client.html
+├── share.html
+├── src/main/java/com/example/
+│   ├── Application.java
+│   ├── controller/SupabaseController.java
+│   └── service/SupabaseService.java
+└── src/main/resources/application.properties
 ```
 
-### Passo 3: Verificar `.gitignore`
-O arquivo `.gitignore` já exclui:
-- ✅ `.env` (credenciais locais)
-- ✅ `target/` (arquivos de build)
-- ✅ `.idea/` e `.vscode/` (arquivos de IDE)
+Contribuições
+- Abra uma issue ou envie um pull request com melhorias.
 
-### Passo 4: Fazer commit seguro
-```bash
-git init
-git add .
-git commit -m "Initial commit: API REST Spring Boot com Supabase"
-git remote add origin https://github.com/seu-usuario/seu-repositorio.git
-git push -u origin main
-```
+Licença
+- Use conforme sua necessidade. Não inclui chaves sensíveis.
 
-### Para outros desenvolvedores
-Ao clonar o repositório:
-1. Clone o projeto
-2. Copie `.env.example` para `.env`
-3. Atualize com suas credenciais do Supabase
-4. Execute `mvn spring-boot:run`
-
----
-
-## �📊 Fluxo de Requisição
-
-```
-1. Usuário abre client.html no navegador
-                    ↓
-2. Clica em "Buscar Dados" com nome da tabela
-                    ↓
-3. JavaScript faz: fetch('/api/dados?tabela=users')
-                    ↓
-4. SupabaseController recebe a requisição
-                    ↓
-5. SupabaseService conecta ao Supabase via WebClient
-                    ↓
-6. Supabase retorna dados em JSON
-                    ↓
-7. Spring retorna para o navegador
-                    ↓
-8. JavaScript exibe dados no client.html
-```
-
----
-
-## 🔑 Conceitos Importantes
-
-- **REST API:** Interface baseada em HTTP (GET, POST, PUT, DELETE)
-- **Spring Boot:** Framework Java para criar aplicações rápido
-- **WebFlux:** Programação reativa (não bloqueia durante requisições)
-- **Supabase:** Banco de dados cloud com autenticação
-- **Frontend vs Backend:** Cliente (navegador) vs Servidor (Java)
-
----
-
-## ✨ Benefícios da nova estrutura
-
-✅ Separação clara de responsabilidades  
-✅ Código limpo e profissional  
-✅ Fácil de manter e expandir  
-✅ Segurança (sem hardcoding de chaves)  
-✅ Segue padrões de industria  
-✅ Pronto para produção  
 
