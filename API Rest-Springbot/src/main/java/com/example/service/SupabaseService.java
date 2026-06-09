@@ -1,5 +1,7 @@
 package com.example.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -15,6 +17,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class SupabaseService {
 
+    private static final Logger logger = LoggerFactory.getLogger(SupabaseService.class);
     private final WebClient webClient;
 
     /*
@@ -45,6 +48,7 @@ public class SupabaseService {
      * friendly JSON response.
      */
     public Mono<String> getDados(String tabela) {
+        logger.info("Fetching data from Supabase table: {}", tabela);
         return this.webClient.get()
                 .uri(supabaseUrl + "/rest/v1/" + tabela)
                 .header("apikey", supabaseAnonKey)
@@ -52,12 +56,15 @@ public class SupabaseService {
                 .header("Content-Type", "application/json")
                 .exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {
+                        logger.debug("Successfully retrieved data from table: {}", tabela);
                         return response.bodyToMono(String.class);
                     } else {
+                        logger.error("Supabase error: {} for table: {}", response.statusCode(), tabela);
                         return response.bodyToMono(String.class)
                                 .flatMap(body -> Mono.error(new RuntimeException("Supabase error: "
                                         + response.statusCode() + " - " + body)));
                     }
-                });
+                })
+                .doOnError(e -> logger.error("Error fetching data from table: {}", tabela, e));
     }
 }

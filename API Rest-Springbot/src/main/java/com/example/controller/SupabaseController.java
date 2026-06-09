@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.service.SupabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -28,25 +29,24 @@ public class SupabaseController {
      * Basic validation is applied to the table name to reduce risk of
      * accidental malformed requests.
      */
-    @GetMapping("/dados")
+    @GetMapping(value = "/dados", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<String> getDados(@RequestParam String tabela) {
         if (tabela == null || tabela.trim().isEmpty()) {
-            return Mono.just("{\"error\":\"Tabela inválida\"}");
+            return Mono.error(new IllegalArgumentException("Parâmetro 'tabela' é obrigatório"));
         }
 
         // Allow only letters, numbers and underscore to avoid accidental injection
         if (!tabela.matches("[A-Za-z0-9_]+")) {
-            return Mono.just("{\"error\":\"Tabela inválida: caracteres não permitidos\"}");
+            return Mono.error(new IllegalArgumentException("Tabela inválida: caracteres não permitidos"));
         }
 
-        return supabaseService.getDados(tabela)
-                .onErrorResume(e -> Mono.just("{\"error\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}"));
+        return supabaseService.getDados(tabela.trim());
     }
 
     /*
      * Simple health endpoint used by load balancers or manual checks.
      */
-    @GetMapping("/health")
+    @GetMapping(value = "/health", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<String> health() {
         return Mono.just("{\"status\":\"OK\"}");
     }
