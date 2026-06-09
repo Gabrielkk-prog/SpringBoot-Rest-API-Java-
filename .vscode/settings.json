@@ -1,0 +1,11 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.debug.settings.showStaticVariables": true,
+    "java.debug.settings.showQualifiedNames": true,
+    "java.debug.settings.maxStringLength": 10000,
+    "java.project.outputPath": "${workspaceFolder}/API Rest-Springbot/target",
+    "[java]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true
+    }
+}
