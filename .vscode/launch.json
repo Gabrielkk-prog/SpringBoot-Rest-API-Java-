@@ -4,24 +4,9 @@
         {
             "type": "java",
             "name": "Spring Boot App",
-            "request": "launch",
-            "mainClass": "com.example.Application",
-            "projectName": "api-rest-springbot",
-            "cwd": "${workspaceFolder}/API Rest-Springbot",
-            "preLaunchTask": "maven: clean",
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "sourceRoots": [
-                "${workspaceFolder}/API Rest-Springbot/src/main/java"
-            ]
-        },
-        {
-            "type": "java",
-            "name": "Attach to Process",
             "request": "attach",
             "hostName": "localhost",
             "port": 5005,
-            "preLaunchTask": "maven: clean",
             "sourceRoots": [
                 "${workspaceFolder}/API Rest-Springbot/src/main/java"
             ]

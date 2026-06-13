@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "maven: clean",
+            "label": "clean",
             "type": "shell",
             "command": "mvn",
             "args": [
@@ -22,7 +22,7 @@
             }
         },
         {
-            "label": "maven: spring-boot:run",
+            "label": "spring-boot run",
             "type": "shell",
             "command": "mvn",
             "args": [
@@ -31,13 +31,26 @@
             "options": {
                 "cwd": "${workspaceFolder}/API Rest-Springbot"
             },
-            "problemMatcher": [
-                "$maven"
-            ],
             "presentation": {
                 "reveal": "always"
             },
             "isBackground": false
+        },
+        {
+            "label": "run and debug",
+            "type": "shell",
+            "command": "mvn",
+            "args": [
+                "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005",
+                "spring-boot:run"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/API Rest-Springbot"
+            },
+            "presentation": {
+                "reveal": "always"
+            },
+            "isBackground": true
         }
     ]
 }
