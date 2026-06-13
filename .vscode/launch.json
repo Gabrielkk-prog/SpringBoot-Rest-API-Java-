@@ -5,13 +5,15 @@
             "type": "java",
             "name": "Spring Boot App",
             "request": "launch",
-            "cwd": "${workspaceFolder}/API Rest-Springbot",
             "mainClass": "com.example.Application",
             "projectName": "api-rest-springbot",
+            "cwd": "${workspaceFolder}/API Rest-Springbot",
             "preLaunchTask": "maven: clean",
-            "args": "",
             "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen"
+            "internalConsoleOptions": "neverOpen",
+            "sourceRoots": [
+                "${workspaceFolder}/API Rest-Springbot/src/main/java"
+            ]
         },
         {
             "type": "java",
@@ -19,7 +21,10 @@
             "request": "attach",
             "hostName": "localhost",
             "port": 5005,
-            "preLaunchTask": "maven: clean"
+            "preLaunchTask": "maven: clean",
+            "sourceRoots": [
+                "${workspaceFolder}/API Rest-Springbot/src/main/java"
+            ]
         }
     ]
 }

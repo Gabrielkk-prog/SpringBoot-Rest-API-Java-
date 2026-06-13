@@ -9,9 +9,9 @@
                 "clean",
                 "package"
             ],
-            "problemMatcher": [
-                "$javaTestRunner"
-            ],
+            "options": {
+                "cwd": "${workspaceFolder}/API Rest-Springbot"
+            },
             "presentation": {
                 "reveal": "always"
             },
@@ -28,8 +28,11 @@
             "args": [
                 "spring-boot:run"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}/API Rest-Springbot"
+            },
             "problemMatcher": [
-                "$javaTestRunner"
+                "$maven"
             ],
             "presentation": {
                 "reveal": "always"
